@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using MongoDB.Driver.Wrappers;
 using NUnit.Framework;
 
 namespace MongoBox
@@ -106,6 +108,25 @@ namespace MongoBox
             find.Value = -5;
             collection.Save(find.ToBsonDocument());
             Console.WriteLine(collection.FindOneAs<TestClass>(null).Value);
+        }
+
+        [Test]
+        public void QueryTest()
+        {
+            var client = new MongoClient();
+            MongoServer server = client.GetServer();
+            server.Connect();
+            MongoDatabase database = server.GetDatabase("test");
+            MongoCollection<BsonDocument> collection = database.GetCollection("test");
+            collection.Drop();
+            collection = database.GetCollection("test");
+            for (int i = 0; i < 10; i++)
+            {
+                collection.Insert(new TestClass {Value = i});
+            }
+            IQueryable<TestClass> testClasses = collection.AsQueryable<TestClass>()
+                                                           .Where(x => x.Value > 5);
+            Assert.AreEqual(4,testClasses.Count());
         }
     }
 
