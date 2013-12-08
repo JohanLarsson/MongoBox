@@ -38,6 +38,7 @@ namespace MongoBox
             MongoDatabase database = server.GetDatabase("test");
             MongoCollection<BsonDocument> collection = database.GetCollection("test");
         }
+
         [Test]
         public void DropCollectionTest()
         {
@@ -91,6 +92,20 @@ namespace MongoBox
             {
                 Console.WriteLine(testClass.Value);
             }
+        }
+
+        [Test]
+        public void UpsertTest()
+        {
+            var client = new MongoClient();
+            MongoServer server = client.GetServer();
+            server.Connect();
+            MongoDatabase database = server.GetDatabase("test");
+            MongoCollection<BsonDocument> collection = database.GetCollection("test");
+            TestClass find = collection.FindOneAs<TestClass>(null);
+            find.Value = -5;
+            collection.Save(find.ToBsonDocument());
+            Console.WriteLine(collection.FindOneAs<TestClass>(null).Value);
         }
     }
 
