@@ -52,8 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MongoStuff.cs" />
-    <Compile Include="MongoTests.cs" />
+    <Compile Include="MongoConnectionTests.cs" />
+    <Compile Include="MongoUsageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
